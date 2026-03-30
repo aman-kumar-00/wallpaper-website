@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Login Page</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<style id="bgcss">
+body {
+	background-size: cover;
+	background-position: center;
+	height: 100vh;
+}
+</style>
+
+</head>
+
+<body class="bg-light">
+
+	<div
+		class="container vh-100 d-flex justify-content-center align-items-center">
+
+		<div class="row w-100 justify-content-center">
+
+			<div class="col-md-4">
+
+				<div class="card shadow p-4">
+
+					<h3 class="text-center mb-4">Login Page</h3>
+
+					<form action=" Authenticate" method="post">
+
+						<div class="mb-3">
+							<label class="form-label">Email</label> <input type="email"
+								class="form-control" placeholder="Enter email" id="email"
+								name="email">
+						</div>
+
+						<div class="mb-3">
+							<label class="form-label">Password</label> <input type="password"
+								class="form-control" placeholder="Enter password" id="password"
+								name="password">
+						</div>
+
+						<div class="form-check mb-3">
+							<input class="form-check-input" type="checkbox"> <label
+								class="form-check-label">Remember me</label>
+						</div>
+
+						<div class="d-grid gap-2">
+
+							<button  type="submit" class="btn btn-success">Login</button>
+
+							<a href="reset.html" class="btn btn-warning">Reset Password</a>
+
+						</div>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<script id="randLocalBg2">
+
+window.onload = function(){
+
+const Image = [
+"Image/bg1.jpg",
+"Image/bg2.jpg",
+"Image/bg3.jpg",
+"Image/bg4.jpg",
+"Image/bg5.jpg",
+"Image/bg6.jpg",
+"Image/bg7.jpg",
+"Image/bg8.jpg",
+"Image/bg9.jpg",
+];
+
+const randomImage = Image[Math.floor(Math.random() * Image.length)];
+
+document.body.style.backgroundImage = "url('" + randomImage + "')";
+
+};
+
+</script>
+
+<script>
+function myFunction() {
+  alert("login faild");
+}
+</script>
+
+</body>
+</html>
