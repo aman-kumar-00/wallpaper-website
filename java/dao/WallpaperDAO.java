@@ -21,49 +21,90 @@ public class WallpaperDAO {
 
 			PreparedStatement ps;
 
-			/* If NO search */
+			/* CASE 1 — No search, show all */
 
 			if (tagstr == null || tagstr.trim().isEmpty()) {
 
-				ps = con.prepareStatement(
+				if (categoryId == 0) {
 
-						"SELECT * FROM HDwallpapers " + "WHERE category_id=? " + "ORDER BY id DESC LIMIT ? OFFSET ?"
+					ps = con.prepareStatement(
 
-				);
+							"SELECT * FROM HDwallpapers " + "ORDER BY id DESC LIMIT ? OFFSET ?"
 
-				ps.setInt(1, categoryId);
-				ps.setInt(2, limit);
-				ps.setInt(3, offset);
+					);
+
+					ps.setInt(1, limit);
+					ps.setInt(2, offset);
+
+				}
+
+				/* CASE 2 — Category only */
+
+				else {
+
+					ps = con.prepareStatement(
+
+							"SELECT * FROM HDwallpapers " + "WHERE category_id=? " + "ORDER BY id DESC LIMIT ? OFFSET ?"
+
+					);
+
+					ps.setInt(1, categoryId);
+					ps.setInt(2, limit);
+					ps.setInt(3, offset);
+
+				}
 
 			}
 
-			/* If SEARCH exists */
+			/* CASE 3 — Global Search */
 
 			else {
 
-				ps = con.prepareStatement(
+				if (categoryId == 0) {
 
-						"SELECT * FROM HDwallpapers " + "WHERE category_id=? " + "AND (tags LIKE ? "
-								+ "OR image_url LIKE ?) " + "ORDER BY id DESC LIMIT ? OFFSET ?"
+					ps = con.prepareStatement(
 
-				);
+							"SELECT * FROM HDwallpapers " + "WHERE tags LIKE ? " + "OR image_url LIKE ? "
+									+ "ORDER BY id DESC LIMIT ? OFFSET ?"
 
-				ps.setInt(1, categoryId);
+					);
 
-				ps.setString(2, "%" + tagstr + "%");
+					ps.setString(1, "%" + tagstr + "%");
 
-				ps.setString(3, "%" + tagstr + "%");
+					ps.setString(2, "%" + tagstr + "%");
 
-				ps.setInt(4, limit);
-				ps.setInt(5, offset);
+					ps.setInt(3, limit);
+					ps.setInt(4, offset);
+
+				}
+
+				/* CASE 4 — Search inside category */
+
+				else {
+
+					ps = con.prepareStatement(
+
+							"SELECT * FROM HDwallpapers " + "WHERE category_id=? "
+									+ "AND (tags LIKE ? OR image_url LIKE ?) " + "ORDER BY id DESC LIMIT ? OFFSET ?"
+
+					);
+
+					ps.setInt(1, categoryId);
+
+					ps.setString(2, "%" + tagstr + "%");
+
+					ps.setString(3, "%" + tagstr + "%");
+
+					ps.setInt(4, limit);
+					ps.setInt(5, offset);
+
+				}
 
 			}
 
 			/* Execute */
 
 			ResultSet rs = ps.executeQuery();
-
-			/* Read results */
 
 			while (rs.next()) {
 

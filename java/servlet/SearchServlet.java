@@ -32,7 +32,7 @@ public class SearchServlet extends HttpServlet {
 
 		String categoryStr = request.getParameter("categoryId");
 
-		int categoryId = 1;
+		int categoryId = 0;
 
 		if (categoryStr != null) {
 

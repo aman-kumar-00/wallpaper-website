@@ -45,7 +45,7 @@ public class HomeServlet extends HttpServlet {
 
 		String categoryStr = request.getParameter("categoryId");
 
-		int categoryId = 1;
+		int categoryId = 0;
 
 		if (categoryStr != null) {
 
@@ -72,18 +72,28 @@ public class HomeServlet extends HttpServlet {
 		List<Wallpaper> list = dao.getWallpapers(tagStr, categoryId, limit, offset);
 
 		/* Print cards */
-
+		
 		for (Wallpaper w : list) {
 
 			out.println("<div class='col-lg-3 col-md-4 col-sm-6'>");
 
-			out.println("<div class='card shadow h-100 position-relative'>");
+			out.println("<div class='card wallpaper-card shadow'>");
 
-			out.println("<img src='" + w.getImagePath() + "' class='wallpaper-img'>");
+			/* Image wrapper */
+
+			out.println("<div class='img-wrapper'>");
+
+			out.println("<img loading='lazy' src='" +
+			        w.getImagePath() +
+			        "' class='wallpaper-img'>");
+
+			out.println("</div>");
 
 			/* Download button */
 
-			out.println("<a href='" + w.getImagePath() + "' download class='download-btn'>");
+			out.println("<a href='" +
+			        w.getImagePath() +
+			        "' download class='download-btn'>");
 
 			out.println("<img src='Icon/file.png' class='download-icon'>");
 
@@ -93,7 +103,7 @@ public class HomeServlet extends HttpServlet {
 
 			out.println("</div>");
 
-		}
+			}
 
 	}
 }

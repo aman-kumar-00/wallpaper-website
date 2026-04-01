@@ -31,6 +31,7 @@ public class UploadWallpaper extends HttpServlet {
 		/* Optional title prefix */
 
 		String prefix = request.getParameter("titlePrefix");
+		String tags = request.getParameter("tags");
 
 		/* Upload folder */
 
@@ -54,7 +55,7 @@ public class UploadWallpaper extends HttpServlet {
 
 			PreparedStatement ps = con.prepareStatement(
 
-					"INSERT INTO HDwallpapers(title,image_url,category_id) VALUES(?,?,?)"
+					"INSERT INTO HDwallpapers(title,image_url,category_id,tags) VALUES(?,?,?,?)"
 
 			);
 
@@ -91,6 +92,7 @@ public class UploadWallpaper extends HttpServlet {
 					ps.setString(1, title);
 					ps.setString(2, imagePath);
 					ps.setInt(3, categoryId);
+					ps.setString(4, tags); // save filename as tag
 
 					ps.executeUpdate();
 
