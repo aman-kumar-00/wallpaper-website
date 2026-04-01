@@ -1,0 +1,30 @@
+<form action="UploadWallpaper" method="post"
+	enctype="multipart/form-data">
+
+	<!-- Optional Prefix -->
+
+	<input type="text" name="titlePrefix"
+		placeholder="Optional Title Prefix (e.g. Nature)"
+		class="form-control mb-2">
+
+	<!-- Category -->
+
+	<select name="categoryId" class="form-control mb-3">
+
+		<option value="1">Nature</option>
+		<option value="2">Space</option>
+		<option value="3">Vehicle</option>
+		<option value="4">City</option>
+
+	</select>
+
+	<!-- Multiple File Upload -->
+
+	<input type="file" name="images" multiple class="form-control mb-3"
+		accept="image/*" required>
+
+	<!-- Submit -->
+
+	<button type="submit" class="btn btn-primary">UploadWallpapers</button>
+
+</form>
