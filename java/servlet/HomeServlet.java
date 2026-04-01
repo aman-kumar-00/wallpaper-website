@@ -19,6 +19,7 @@ public class HomeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 System.out.println("caalledddd");
+
 		response.setContentType("text/html");
 
 		PrintWriter out = response.getWriter();
@@ -36,10 +37,29 @@ System.out.println("caalledddd");
 
 		int limit = 8;
 		int offset = (page - 1) * limit;
+		
+		
+		
+		String categoryStr =request.getParameter("categoryId");
+
+				
+				int categoryId = 1; // default
+
+				if(categoryStr != null){
+
+				categoryId =
+				Integer.parseInt(categoryStr);
+
+				}
+
+				System.out.println(
+				"Category Selected: " + categoryId);
+				
+				
 
 		WallpaperDAO dao = new WallpaperDAO();
 
-		List<Wallpaper> list = dao.getWallpapers(limit, offset);
+		List<Wallpaper> list = dao.getWallpapers(categoryId,limit, offset);
 
 		for (Wallpaper w : list) {
 
@@ -51,7 +71,16 @@ System.out.println("caalledddd");
 
 			out.println("<div class='card-body'>");
 
-			out.println("<h5>" + w.getTitle() + "</h5>");
+			//out.println("<h5>" + w.getTitle() + "</h5>");
+			
+			out.println("<a href='" +
+			        w.getImagePath() +
+			        "' download class='download-btn'>");
+
+			out.println("<img src='Icon/file.png' class='download-icon'>");
+
+			out.println("</a>");
+
 
 			out.println("</div>");
 

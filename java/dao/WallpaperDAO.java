@@ -11,7 +11,7 @@ import model.Wallpaper;
 
 public class WallpaperDAO {
 
-	public List<Wallpaper> getWallpapers(int limit, int offset) {
+	public List<Wallpaper> getWallpapers(int categoryId,int limit, int offset) {
 
 		List<Wallpaper> list = new ArrayList<>();
 
@@ -19,10 +19,12 @@ public class WallpaperDAO {
 
 			Connection con = DBConnection.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM HDwallpapers LIMIT ? OFFSET ?");
-
-			ps.setInt(1, limit);
-			ps.setInt(2, offset);
+			
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM HDwallpapers WHERE category_id=? ORDER BY id DESC LIMIT ? OFFSET ?");
+			
+			ps.setInt(1, categoryId);
+			ps.setInt(2, limit);
+			ps.setInt(3, offset);
 
 			ResultSet rs = ps.executeQuery();
 
