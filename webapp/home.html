@@ -53,51 +53,66 @@ ul li a:hover {
 	color: black;
 }
 
-
 .wallpaper-card {
-
-height: 300px;          
-
-overflow: hidden;
-
-border-radius: 10px;
-
+	height: 300px;
+	border-radius: 10px;
+	overflow: hidden;
+	border-radius: 10px;
 }
 
 .wallpaper-img {
-
-width: 100%;
-
-height: 220px;         
-
-object-fit: cover;      
-
-background-color: #eee; 
-
+	width: 100%;
+	height: 220px;
+	object-fit: cover;
+	background-color: #eee;
 }
 
 .card-body {
-
-height: 80px;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
+	height: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .card-title {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0;
+}
 
-font-size: 16px;
+.download-icon {
 
-font-weight: 600;
+width: 28px;
 
-margin: 0;
+height: 28px;
+
+cursor: pointer;
 
 }
 
+.download-btn {
+
+position: absolute;
+
+top: 10px;
+
+right: 10px;
+
+background: rgba(255,255,255,0.8);
+
+border-radius: 50%;
+
+padding: 6px;
+
+}
+
+.download-btn:hover {
+
+background: white;
+
+transform: scale(1.1);
+
+}
 
 </style>
 
@@ -127,11 +142,15 @@ margin: 0;
 						href="home.html">Home</a></li>
 
 					<li class="navbar-select"><label for="category">Category:</label>
-						<select name="category" id="category">
-							<option value=1>Nature</option>
-							<option value=2>Sports</option>
-							<option value=3>Vehicle</option>
-							<option value=4>City</option>
+
+						<select name="category" id="categoryId"
+						onchange="changeCategory()">
+
+							<option value="1">Nature</option>
+							<option value="2">Space</option>
+							<option value="3">Vehicle</option>
+							<option value="4">City</option>
+
 					</select></li>
 				</ul>
 
@@ -141,13 +160,27 @@ margin: 0;
 					<button class="btn btn-outline-light" type="submit">Search</button>
 				</form>
 
+
+				<ul class="navbar-nav ms-auto align-items-center">
+
+
+					<li class="nav-item me-4"><a class="btn btn-success"
+						href="Uploadform.html"> UploadWallpaper </a></li>
+
+				</ul>
+
 				<!-- Right menu -->
 				<ul class="navbar-nav ms-auto">
+
 					<li class="nav-item"><a class="nav-link" href="login.html">Login</a>
 					<li class="nav-item"><a class="nav-link" href="SignUp.html">SignUp</a>
 
 					</li>
 				</ul>
+
+
+
+
 
 			</div>
 		</div>
@@ -167,19 +200,78 @@ margin: 0;
 
 let page = 1;
 
-function loadWallpapers(){
-	//alert("called");
-	fetch("Home?page=" + page)
-		.then(res => res.text())
-		.then(data => {document.getElementById("wallpaperContainer").innerHTML += data;
-		
-		page++;
-	});
+let currentCategory = 1; // default category
+
+/* When category changes */
+
+function changeCategory(){
+
+currentCategory =
+document.getElementById("categoryId").value;
+
+page = 1;
+
+/* Clear old wallpapers */
+
+document.getElementById(
+"wallpaperContainer"
+).innerHTML = "";
+
+/* Load selected category */
+
+loadWallpapers();
 
 }
 
-// First load
+/* Load wallpapers */
+
+function loadWallpapers(){
+
+fetch(
+"Home?page=" + page +
+"&categoryId=" + currentCategory
+)
+
+.then(response => response.text())
+
+.then(data => {
+
+document.getElementById(
+"wallpaperContainer"
+).innerHTML += data;
+
+page++;
+
+});
+
+}
+
+/* First page load */
+
+window.onload = function(){
+
 loadWallpapers();
+
+};
+
+
+/* Detect scroll */
+
+window.addEventListener("scroll", function(){
+
+if(
+
+window.innerHeight + window.scrollY
+>= document.body.offsetHeight - 200
+
+){
+
+loadWallpapers();
+
+}
+
+});
+
 
 </script>
 

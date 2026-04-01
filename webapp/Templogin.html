@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Toggle Example</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+#navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #333;
+	color: white;
+	padding: 15px 20px;
+}
+
+button {
+	padding: 8px 16px;
+	cursor: pointer;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+
+.profile-link {
+	color: #fff;
+	text-decoration: none;
+	margin: 0 15px;
+}
+
+.profile-link:hover {
+	text-decoration: underline;
+}
+
+/* The crucial utility class for hiding elements */
+.hidden {
+	display: none !important;
+}
+</style>
+</head>
+<body>
+
+	<nav id="navbar">
+		<div class="logo">MyApp</div>
+
+		<div id="logged-out-section">
+			<button onclick="loginUser()">Log In</button>
+		</div>
+
+		<div id="logged-in-section" class="hidden">
+			<span id="user-greeting"></span> <a href="#profile"
+				class="profile-link">My Profile</a>
+			<button onclick="logoutUser()">Log Out</button>
+		</div>
+	</nav>
+
+	<main>
+		<h1>Welcome to the App!</h1>
+		<p>Click the login button in the top right to see the UI change.</p>
+	</main>
+
+	<script>
+		// Grab the DOM elements we need to manipulate
+		const loggedOutSection = document.getElementById('logged-out-section');
+		const loggedInSection = document.getElementById('logged-in-section');
+		const userGreeting = document.getElementById('user-greeting');
+
+		// 1. Function to check the current auth state and update the UI
+		function checkAuthState() {
+			// Check if a 'user' item exists in localStorage
+			const userString = localStorage.getItem('user');
+
+			if (userString) {
+				// User is logged in
+				const user = JSON.parse(userString);
+
+				// Hide the login button, show the profile/logout section
+				loggedOutSection.classList.add('hidden');
+				loggedInSection.classList.remove('hidden');
+
+				// Personalize the greeting
+				userGreeting.textContent = `Hello, ${user.username}!`;
+			} else {
+				// User is logged out
+
+				// Show the login button, hide the profile/logout section
+				loggedOutSection.classList.remove('hidden');
+				loggedInSection.classList.add('hidden');
+
+				// Clear out any old greetings
+				userGreeting.textContent = '';
+			}
+		}
+
+		// 2. Simulate logging in
+		function loginUser() {
+			// In a real app, you would send an API request to your backend here.
+			// We are simulating a successful login response.
+			const mockUser = {
+				id : 101,
+				username : "JaneDoe",
+				role : "admin"
+			};
+
+			// Save the user data to localStorage
+			localStorage.setItem('user', JSON.stringify(mockUser));
+
+			// Refresh the UI
+			checkAuthState();
+			alert("Successfully logged in!");
+		}
+
+		// 3. Simulate logging out
+		function logoutUser() {
+			// Remove the user data from localStorage
+			localStorage.removeItem('user');
+
+			// Refresh the UI
+			checkAuthState();
+			alert("You have been logged out.");
+		}
+
+		// 4. Run the check automatically when the page loads
+		document.addEventListener('DOMContentLoaded', checkAuthState);
+	</script>
+</body>
+</html>
