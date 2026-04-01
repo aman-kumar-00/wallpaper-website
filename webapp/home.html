@@ -53,42 +53,43 @@ ul li a:hover {
 	color: black;
 }
 
+/* CARD */
+
 .wallpaper-card {
-	height: 300px;
-	border-radius: 10px;
-	overflow: hidden;
-	border-radius: 10px;
+
+border-radius: 10px;
+
+overflow: hidden;
+
+position: relative;
+
 }
 
 .wallpaper-img {
-	width: 100%;
-	height: 220px;
-	object-fit: cover;
-	background-color: #eee;
-}
 
-.card-body {
-	height: 80px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
+width: 100%;
 
-.card-title {
-	font-size: 16px;
-	font-weight: 600;
-	margin: 0;
-}
+height: 100%;
 
-.download-icon {
-
-width: 28px;
-
-height: 28px;
-
-cursor: pointer;
+object-fit: cover;
 
 }
+
+.wallpaper-img {
+
+width: 100%;
+
+height: 100%;
+
+object-fit: cover;
+
+}
+
+
+
+
+
+/* DOWNLOAD */
 
 .download-btn {
 
@@ -106,14 +107,13 @@ padding: 6px;
 
 }
 
-.download-btn:hover {
+.download-icon {
 
-background: white;
+width: 26px;
 
-transform: scale(1.1);
+height: 26px;
 
 }
-
 </style>
 
 </head>
@@ -146,6 +146,7 @@ transform: scale(1.1);
 						<select name="category" id="categoryId"
 						onchange="changeCategory()">
 
+							<option value="0">All</option>
 							<option value="1">Nature</option>
 							<option value="2">Space</option>
 							<option value="3">Vehicle</option>
@@ -155,9 +156,15 @@ transform: scale(1.1);
 				</ul>
 
 				<!-- Center Search -->
-				<form class="d-flex mx-auto" role="search">
-					<input class="form-control me-2" type="search" placeholder="Search">
-					<button class="btn btn-outline-light" type="submit">Search</button>
+				<form class="d-flex mx-auto" onsubmit="searchWallpaper(event)">
+
+					<input class="form-control me-2" type="search"
+						placeholder="Search wallpapers..." id="searchInput">
+
+					<button class="btn btn-outline-light" type="submit">
+
+						Search</button>
+
 				</form>
 
 
@@ -186,7 +193,7 @@ transform: scale(1.1);
 		</div>
 	</nav>
 
-	<h3 class="text-center mt-4">HD Wallpaper Images & Pictures</h3>
+	<h3 class="text-center mt-4">Wallpaper</h3>
 
 	<div class="container mt-4">
 
@@ -200,9 +207,13 @@ transform: scale(1.1);
 
 let page = 1;
 
-let currentCategory = 1; // default category
+let currentCategory = 0; // show ALL first
 
-/* When category changes */
+let isLoading = false;
+
+let hasMoreData = true;
+
+/* CATEGORY CHANGE */
 
 function changeCategory(){
 
@@ -211,58 +222,106 @@ document.getElementById("categoryId").value;
 
 page = 1;
 
-/* Clear old wallpapers */
+hasMoreData = true;
+
+/* Clear container */
 
 document.getElementById(
 "wallpaperContainer"
 ).innerHTML = "";
 
-/* Load selected category */
+/* Load new category */
 
 loadWallpapers();
 
 }
 
-/* Load wallpapers */
+/* MAIN LOADER */
 
 function loadWallpapers(){
 
+if(isLoading || !hasMoreData) return;
+
+isLoading = true;
+
+/* Get search keyword */
+
+let keyword = "";
+
+let searchBox =
+document.getElementById("searchInput");
+
+if(searchBox){
+
+keyword = searchBox.value.trim();
+
+}
+
+/* Fetch from servlet */
+
 fetch(
 "Home?page=" + page +
-"&categoryId=" + currentCategory
+"&categoryId=" + currentCategory +
+"&tags=" + keyword
 )
 
 .then(response => response.text())
 
 .then(data => {
 
+/* No more data */
+
+if(data.trim() === ""){
+
+hasMoreData = false;
+
+isLoading = false;
+
+return;
+
+}
+
+/* Append cards */
+
 document.getElementById(
 "wallpaperContainer"
 ).innerHTML += data;
 
+/* Next page */
+
 page++;
+
+isLoading = false;
+
+})
+
+.catch(error => {
+
+console.log("Fetch error:", error);
+
+isLoading = false;
 
 });
 
 }
 
-/* First page load */
-
-window.onload = function(){
-
-loadWallpapers();
-
-};
-
-
-/* Detect scroll */
+/* INFINITE SCROLL */
 
 window.addEventListener("scroll", function(){
 
+let scrollTop =
+window.scrollY;
+
+let windowHeight =
+window.innerHeight;
+
+let documentHeight =
+document.documentElement.scrollHeight;
+
 if(
 
-window.innerHeight + window.scrollY
->= document.body.offsetHeight - 200
+scrollTop + windowHeight
+>= documentHeight - 200
 
 ){
 
@@ -272,9 +331,37 @@ loadWallpapers();
 
 });
 
+/* SEARCH */
+
+function searchWallpaper(event){
+
+event.preventDefault();
+
+/* Reset */
+
+page = 1;
+
+hasMoreData = true;
+
+document.getElementById(
+"wallpaperContainer"
+).innerHTML = "";
+
+/* Load search */
+
+loadWallpapers();
+
+}
+
+/* FIRST LOAD */
+
+window.onload = function(){
+
+loadWallpapers();
+
+};
 
 </script>
-
 
 </body>
 </html>
